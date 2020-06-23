@@ -36,7 +36,6 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	req.Header.Set("Content-Encoding", "gzip")
 	return nil
 }
-
 func GzipCompress() api.RequestMiddler {
 	return &gzipCompress{}
 }
