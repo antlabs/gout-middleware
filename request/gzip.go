@@ -9,9 +9,9 @@ import (
 	"net/http"
 )
 
-type gzipReqCompress struct{}
+type gzipCompress struct{}
 
-func (g *gzipReqCompress) ModifyRequest(req *http.Request) error {
+func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	// 如果已经有一种编码格式，不会生效
 	if len(req.Header.Get("Content-Encoding")) > 0 {
 		return nil
@@ -38,5 +38,5 @@ func (g *gzipReqCompress) ModifyRequest(req *http.Request) error {
 }
 
 func ReqGzipCompress() api.RequestMiddler {
-	return &gzipReqCompress{}
+	return &gzipCompress{}
 }
