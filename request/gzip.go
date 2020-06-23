@@ -37,6 +37,6 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	return nil
 }
 
-func ReqGzipCompress() api.RequestMiddler {
+func GzipCompress() api.RequestMiddler {
 	return &gzipCompress{}
 }
