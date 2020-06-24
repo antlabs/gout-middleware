@@ -9,12 +9,27 @@ import (
 	"net/http"
 )
 
-type gzipCompress struct{}
+// 大于或等于EnableGzipMore 字节数的才压缩
+type EnableGzipGreaterEqual int
+
+type gzipCompress struct {
+	enableGzipGreaterEqual int
+}
 
 func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	// 如果已经有一种编码格式，不会生效
 	if len(req.Header.Get("Content-Encoding")) > 0 {
 		return nil
+	}
+
+	if req.ContentLength == 0 {
+		return nil
+	}
+
+	if g.enableGzipGreaterEqual > 0 {
+		if req.ContentLength < int64(g.enableGzipGreaterEqual) {
+			return nil
+		}
 	}
 
 	buf := &bytes.Buffer{}
@@ -36,6 +51,17 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	req.Header.Set("Content-Encoding", "gzip")
 	return nil
 }
-func GzipCompress() api.RequestMiddler {
-	return &gzipCompress{}
+
+func GzipCompress(args ...interface{}) api.RequestMiddler {
+
+	compress := &gzipCompress{}
+
+	for _, a := range args {
+		switch a.(type) {
+		case EnableGzipGreaterEqual:
+			compress.enableGzipGreaterEqual = int(a.(EnableGzipGreaterEqual))
+		}
+	}
+
+	return compress
 }
