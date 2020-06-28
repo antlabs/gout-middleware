@@ -18,7 +18,8 @@ func (g *gzipDecompress) ModifyRequest(req *http.Request) error {
 	var saveGzip bytes.Buffer
 	io.Copy(&saveGzip, req.Body)
 
-	if saveGzip.Len() == 0 || saveGzip.Len() < 2 {
+	req.Body = ioutil.NopCloser(&saveGzip)
+	if saveGzip.Len() < 2 {
 		return nil
 	}
 
