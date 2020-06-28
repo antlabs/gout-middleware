@@ -38,7 +38,7 @@ func main() {
 ### unzip
 #### 解压缩body里面的gzip数据
 ```go
-mport (
+import (
 	"github.com/antlabs/gout-middleware/request"
         "github.com/guonaihong/gout"
         "bytes"
