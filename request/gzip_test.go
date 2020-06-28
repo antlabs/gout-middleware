@@ -12,7 +12,7 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/guonaihong/gout"
-	"gopkg.in/go-playground/assert.v1"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -61,6 +61,35 @@ func TestGzipCompress_GreaterEqual(t *testing.T) {
 	w.Close()
 
 	assert.Equal(t, got, buf.String())
+}
+
+// 测试debug函数打开时，客户端压缩功能是否正常
+func TestGzipCompressDebug(t *testing.T) {
+	// 客户端压缩 + 服务不解压缩
+	got := []byte{}
+	ts := createNotDeCompressServer()
+	gout.POST(ts.URL).Debug(true).RequestUse(GzipCompress()).SetBody(testGzipData).BindBody(&got).Do()
+
+	buf := &bytes.Buffer{}
+
+	w := stdgzip.NewWriter(buf)
+	w.Write([]byte(testGzipData))
+	w.Close()
+
+	assert.Equal(t, got, buf.Bytes())
+
+	// 客户端压缩 + 服务解压缩
+	ts = createDeCompressServer()
+	got = []byte{}
+	gout.POST(ts.URL).Debug(true).RequestUse(GzipCompress()).SetBody(testGzipData).BindBody(&got).Do()
+
+	buf = &bytes.Buffer{}
+
+	w = stdgzip.NewWriter(buf)
+	w.Write([]byte(testGzipData))
+	w.Close()
+
+	assert.Equal(t, got, []byte(testGzipData))
 }
 
 func TestGzipCompress(t *testing.T) {

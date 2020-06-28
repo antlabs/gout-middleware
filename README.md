@@ -35,3 +35,17 @@ func main() {
 }
 
 ```
+### unzip
+#### 解压缩body里面的gzip数据
+```go
+mport (
+	"github.com/antlabs/gout-middleware/request"
+        "github.com/guonaihong/gout"
+        "bytes"
+)
+
+func main() {
+        var buf bytes.Buffer //假装buf里面有gzip数据
+        gout.POST(":6666/compress").RequestUse(request.GzipDecompress()).SetBody(buf).Do()
+}
+```

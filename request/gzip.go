@@ -26,6 +26,8 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 		return nil
 	}
 
+	// TODO 如果http client可以使用chunk 方式发送数据
+	// 就不能使用req.ContentLength作为数据长度
 	if g.enableGzipGreaterEqual > 0 {
 		if req.ContentLength < int64(g.enableGzipGreaterEqual) {
 			return nil
@@ -35,12 +37,8 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	buf := &bytes.Buffer{}
 
 	w := gzip.NewWriter(buf)
-	body, err := req.GetBody()
-	if err != nil {
-		return nil
-	}
 
-	io.Copy(w, body)
+	io.Copy(w, req.Body)
 	w.Close()
 
 	if req.ContentLength > 0 {
