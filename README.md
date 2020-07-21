@@ -49,3 +49,21 @@ func main() {
         gout.POST(":6666/compress").RequestUse(request.GzipDecompress()).SetBody(buf).Do()
 }
 ```
+### upload 进度条
+```go
+package main
+
+import (
+        "bytes"
+        "github.com/antlabs/gout-middleware/request"
+        "github.com/guonaihong/gout"
+)
+
+func main() {
+        gout.POST(":8080").RequestUse(request.ProgressBar(func(currBytes, totalBytes int) {
+
+                fmt.Printf("%d:%d-->%f%%\n", currBytes, totalBytes, float64(currBytes)/float64(totalBytes))
+        })).SetBody(strings.Repeat("1", 100000) /*构造大点的测试数据，这里换成真实业务数据*/).Do()
+}
+
+```
