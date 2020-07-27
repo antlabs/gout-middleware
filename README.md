@@ -79,12 +79,14 @@ func main() {
 package main
 
 import (
-        "bytes"
-        "github.com/antlabs/gout-middleware/request"
-        "github.com/guonaihong/gout"
+	"github.com/antlabs/gout-middleware/request"
+	"github.com/guonaihong/gout"
+	"net/http"
 )
 
 func main() {
-        gout.New(c).GET(":8080/301").RequestUse(Close3xx(c, true)).BindBody(&got).Do()
+	c := &http.Client{}
+	gout.New(c).GET(":8080/301").RequestUse(request.Close3xx(c, true)).Do()
 }
+
 ```
