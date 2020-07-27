@@ -4,6 +4,13 @@
 
 gout请求和响应中间件项目
 ## 请求中间件
+- [gzip](#gzip)
+  - [请求body使用gzip压缩](#请求body使用gzip压缩)
+  - [设置请求body大于一定字节数才压缩](#设置请求body大于一定字节数才压缩)
+- [unzip](#unzip)
+  - [解压缩body里面的gzip数据](#解压缩body里面的gzip数据)
+- [upload 进度条](#upload进度条)
+- [close 3xx自动跳转](#close-3xx自动跳转)
 ### gzip
 #### 请求body使用gzip压缩
 ```go
@@ -49,7 +56,7 @@ func main() {
         gout.POST(":6666/compress").RequestUse(request.GzipDecompress()).SetBody(buf).Do()
 }
 ```
-### upload 进度条
+### upload进度条
 ```go
 package main
 
@@ -66,4 +73,18 @@ func main() {
         })).SetBody(strings.Repeat("1", 100000) /*构造大点的测试数据，这里换成真实业务数据*/).Do()
 }
 
+```
+### close 3xx自动跳转
+```go
+package main
+
+import (
+        "bytes"
+        "github.com/antlabs/gout-middleware/request"
+        "github.com/guonaihong/gout"
+)
+
+func main() {
+        gout.New(c).GET(":8080/301").RequestUse(Close3xx(c, true)).BindBody(&got).Do()
+}
 ```

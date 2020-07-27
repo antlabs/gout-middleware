@@ -19,6 +19,10 @@ const (
 	testGzipData = "123456789abcdefgh"
 )
 
+func init() {
+	gin.SetMode(gin.ReleaseMode)
+}
+
 func createNotDeCompressServer() *httptest.Server {
 	r := gin.New()
 
