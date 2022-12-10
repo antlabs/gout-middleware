@@ -3,7 +3,7 @@ package request
 import (
 	"net/http"
 
-	api "github.com/guonaihong/gout/interface"
+	"github.com/guonaihong/gout/middler"
 )
 
 type close3xx struct {
@@ -31,6 +31,6 @@ func (c *close3xx) ModifyRequest(req *http.Request) error {
 
 // close 为true 则关闭3xx跳转功能
 // close 为false 则不关闭3xx跳转功能
-func Close3xx(c *http.Client, close bool) api.RequestMiddler {
+func Close3xx(c *http.Client, close bool) middler.RequestMiddler {
 	return &close3xx{c: c, close: close}
 }

@@ -3,10 +3,11 @@ package request
 import (
 	"bytes"
 	"compress/gzip"
-	api "github.com/guonaihong/gout/interface"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/guonaihong/gout/middler"
 )
 
 // 大于或等于EnableGzipMore 字节数的才压缩
@@ -50,7 +51,7 @@ func (g *gzipCompress) ModifyRequest(req *http.Request) error {
 	return nil
 }
 
-func GzipCompress(args ...interface{}) api.RequestMiddler {
+func GzipCompress(args ...interface{}) middler.RequestMiddler {
 
 	compress := &gzipCompress{}
 

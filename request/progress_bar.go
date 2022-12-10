@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	api "github.com/guonaihong/gout/interface"
+	"github.com/guonaihong/gout/middler"
 )
 
-//上传进度条
+// 上传进度条
 type progressBar struct {
 	callback   func(currBytes, totalBytes int)
 	r          io.Reader
@@ -33,6 +33,6 @@ func (g *progressBar) ModifyRequest(req *http.Request) error {
 	return nil
 }
 
-func ProgressBar(callback func(currBytes, totalBytes int)) api.RequestMiddler {
+func ProgressBar(callback func(currBytes, totalBytes int)) middler.RequestMiddler {
 	return &progressBar{callback: callback}
 }

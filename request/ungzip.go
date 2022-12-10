@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	api "github.com/guonaihong/gout/interface"
+	"github.com/guonaihong/gout/middler"
 )
 
 type gzipDecompress struct{}
@@ -43,6 +43,6 @@ func (g *gzipDecompress) ModifyRequest(req *http.Request) error {
 	return nil
 }
 
-func GzipDecompress() api.RequestMiddler {
+func GzipDecompress() middler.RequestMiddler {
 	return &gzipDecompress{}
 }
